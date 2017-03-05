@@ -6,11 +6,14 @@ using System.Linq;
 public class Snake2 : MonoBehaviour {
 
 	Vector2 dir = Vector2.right;
+	public Vector3 initial_position;
 	List<Transform> tail = new List<Transform>();
 	bool ate = false;
 	public GameObject tailPrefab;
 	// Use this for initialization
 	void Start () {
+		initial_position = new Vector3();
+		initial_position = transform.position;
 		InvokeRepeating("Move", 0.1f, 0.1f);
 	}
 	

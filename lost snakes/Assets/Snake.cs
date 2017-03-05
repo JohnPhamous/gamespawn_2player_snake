@@ -4,40 +4,45 @@ using UnityEngine;
 using System.Linq;
 
 public class Snake : MonoBehaviour {
-	Vector2 dir = -Vector2.right;
+	Vector3 dir = -Vector3.right;
+	public Vector3 initial_position;
 	List<Transform> tail = new List<Transform>();
 	bool ate = false;
 	public GameObject tailPrefab;
 	// Use this for initialization
 	void Start () {
+		initial_position = new Vector3();
+		initial_position = transform.position;
 		InvokeRepeating("Move", 0.1f, 0.1f);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKey(KeyCode.RightArrow)) {
-			if (dir == Vector2.left) {
-				return;
+		if (transform.position.x % 1.0 == 0.0 || transform.position.y % 1.0 == 0.0) {
+			if (Input.GetKey(KeyCode.RightArrow)) {
+				if (dir == Vector3.left) {
+					return;
+				}
+				dir = Vector3.right;
 			}
-			dir = Vector2.right;
-		}
-		else if (Input.GetKey(KeyCode.DownArrow)) {
-			if (dir == Vector2.up) {
-				return;
+			else if (Input.GetKey(KeyCode.DownArrow)) {
+				if (dir == Vector3.up) {
+					return;
+				}
+				dir = -Vector3.up;
 			}
-			dir = -Vector2.up;
-		}
-		else if (Input.GetKey(KeyCode.LeftArrow)) {
-			if (dir == Vector2.right) {
-				return;
+			else if (Input.GetKey(KeyCode.LeftArrow)) {
+				if (dir == Vector3.right) {
+					return;
+				}
+				dir = -Vector3.right;
 			}
-			dir = -Vector2.right;
-		}
-		else if (Input.GetKey(KeyCode.UpArrow)) {
-			if (dir == -Vector2.up) {
-				return;
+			else if (Input.GetKey(KeyCode.UpArrow)) {
+				if (dir == -Vector3.up) {
+					return;
+				}
+				dir = Vector3.up;
 			}
-			dir = Vector2.up;
 		}
 	}
 	/*
@@ -46,11 +51,11 @@ public class Snake : MonoBehaviour {
 	 */
 	void Move() {
 		// saves current position 
-		Vector2 v = transform.position;
+		Vector3 v = transform.position;
 		// GetComponent<Rigidbody2D>().MovePosition(dir);
 		// Move head in new direction based on input
-		transform.Translate(dir);
-
+		//transform.Translate(dir);
+        GetComponent<Rigidbody2D>().MovePosition(transform.position + dir);
 		if (ate) {
 			GameObject g = (GameObject)Instantiate(tailPrefab, v, Quaternion.identity);
 			tail.Insert(0, g.transform);
