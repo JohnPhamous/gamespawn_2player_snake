@@ -10,13 +10,14 @@ public class Snake : MonoBehaviour {
 	public bool ate = false;
 	public GameObject tailPrefab;
 	public bool move = true;
-	private int max_size = 2;
+	private int max_size = 0;
 	// move sound effect
 	public AudioClip move_sound;
 	private AudioSource audio_source;
 
 	// portal data
 	public GameObject portalPrefab;
+	bool is_spawn = false;
 
 	// Use this for initialization
 	void Start () {
@@ -81,16 +82,17 @@ public class Snake : MonoBehaviour {
 				tail.Insert(0, tail.Last());
 				tail.RemoveAt(tail.Count - 1);
 			}
-			Debug.Log(tail.Count);
+			// Debug.Log(tail.Count);
 		}
 		else {
 			SpriteRenderer renderer = GetComponent<SpriteRenderer>();
 			renderer.color = new Color(1f, 0.0f, 0.0f, 1f);
 			Invoke("stun", 1);
 		}
-		if (tail.Count == max_size) {
+		if (tail.Count == max_size && is_spawn == false) {
 			Debug.Log("spawn portal");
 			Instantiate(portalPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+			is_spawn = true;
 		}
 	}
 	void stun() {
