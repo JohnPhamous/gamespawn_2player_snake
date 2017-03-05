@@ -5,10 +5,10 @@ using System.Linq;
 
 public class Snake2 : MonoBehaviour {
 
-	Vector2 dir = Vector2.right;
+	Vector3 dir = -Vector3.right;
 	public Vector3 initial_position;
 	List<Transform> tail = new List<Transform>();
-	bool ate = false;
+	public bool ate = false;
 	public GameObject tailPrefab;
 	public bool move = true;
 	
@@ -26,29 +26,31 @@ public class Snake2 : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKey(KeyCode.D)) {
-			if (dir == Vector2.left) {
-				return;
+		if (transform.position.x % 1.0 == 0.0 || transform.position.y % 1.0 == 0.0) {
+			if (Input.GetKey(KeyCode.RightArrow)) {
+				if (dir == Vector3.left) {
+					return;
+				}
+				dir = Vector3.right;
 			}
-			dir = Vector2.right;
-		}
-		else if (Input.GetKey(KeyCode.S)) {
-			if (dir == Vector2.up) {
-				return;
+			else if (Input.GetKey(KeyCode.DownArrow)) {
+				if (dir == Vector3.up) {
+					return;
+				}
+				dir = -Vector3.up;
 			}
-			dir = -Vector2.up;
-		}
-		else if (Input.GetKey(KeyCode.A)) {
-			if (dir == Vector2.right) {
-				return;
+			else if (Input.GetKey(KeyCode.LeftArrow)) {
+				if (dir == Vector3.right) {
+					return;
+				}
+				dir = -Vector3.right;
 			}
-			dir = -Vector2.right;
-		}
-		else if (Input.GetKey(KeyCode.W)) {
-			if (dir == -Vector2.up) {
-				return;
+			else if (Input.GetKey(KeyCode.UpArrow)) {
+				if (dir == -Vector3.up) {
+					return;
+				}
+				dir = Vector3.up;
 			}
-			dir = Vector2.up;
 		}
 	}
 	/*
@@ -59,10 +61,10 @@ public class Snake2 : MonoBehaviour {
 		if (move) {
 			audio_source.PlayOneShot(move_sound, 2F);
 			// saves current position 
-			Vector2 v = transform.position;
+			Vector3 v = transform.position;
 
 			// Move head in new direction based on input
-			transform.Translate(dir);
+			GetComponent<Rigidbody2D>().MovePosition(transform.position + dir);
 
 			if (ate) {
 				GameObject g = (GameObject)Instantiate(tailPrefab, v, Quaternion.identity);
@@ -78,16 +80,15 @@ public class Snake2 : MonoBehaviour {
 			}
 		}
 		else {
+			SpriteRenderer renderer = GetComponent<SpriteRenderer>();
+			renderer.color = new Color(1f, 0.0f, 0.0f, 1f);
 			Invoke("stun", 1);
 		}
 	}
 	void stun() {
 		move = true;
-	}
-	void onTriggerEnter2D(Collider2D coll) {
-		if (coll.name.StartsWith("FoodPrefab")) {
-			ate = true;
-			Destroy(coll.gameObject);
-		}
+		SpriteRenderer renderer = GetComponent<SpriteRenderer>();
+		// changes sprite to red when collision is detected
+		renderer.color = new Color(1f, 1f, 1f, 1f);
 	}
 }

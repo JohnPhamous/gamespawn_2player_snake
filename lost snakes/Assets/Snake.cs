@@ -4,10 +4,10 @@ using UnityEngine;
 using System.Linq;
 
 public class Snake : MonoBehaviour {
-	Vector3 dir = -Vector3.right;
+	Vector3 dir = Vector3.right;
 	public Vector3 initial_position;
 	List<Transform> tail = new List<Transform>();
-	bool ate = false;
+	public bool ate = false;
 	public GameObject tailPrefab;
 	public bool move = true;
 	
@@ -26,25 +26,25 @@ public class Snake : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (transform.position.x % 1.0 == 0.0 || transform.position.y % 1.0 == 0.0) {
-			if (Input.GetKey(KeyCode.RightArrow)) {
+			if (Input.GetKey(KeyCode.D)) {
 				if (dir == Vector3.left) {
 					return;
 				}
 				dir = Vector3.right;
 			}
-			else if (Input.GetKey(KeyCode.DownArrow)) {
+			else if (Input.GetKey(KeyCode.S)) {
 				if (dir == Vector3.up) {
 					return;
 				}
 				dir = -Vector3.up;
 			}
-			else if (Input.GetKey(KeyCode.LeftArrow)) {
+			else if (Input.GetKey(KeyCode.A)) {
 				if (dir == Vector3.right) {
 					return;
 				}
 				dir = -Vector3.right;
 			}
-			else if (Input.GetKey(KeyCode.UpArrow)) {
+			else if (Input.GetKey(KeyCode.W)) {
 				if (dir == -Vector3.up) {
 					return;
 				}
@@ -52,6 +52,7 @@ public class Snake : MonoBehaviour {
 			}
 		}
 	}
+	
 	/*
 	The head changes position. Creates a new tail object
 	where the head was. Deletes the last tail object.
@@ -61,8 +62,10 @@ public class Snake : MonoBehaviour {
 			audio_source.PlayOneShot(move_sound, 2F);
 			// saves current position 
 			Vector3 v = transform.position;
+
 			// Move head in new direction based on input
 			GetComponent<Rigidbody2D>().MovePosition(transform.position + dir);
+			
 			if (ate) {
 				GameObject g = (GameObject)Instantiate(tailPrefab, v, Quaternion.identity);
 				tail.Insert(0, g.transform);
@@ -77,16 +80,15 @@ public class Snake : MonoBehaviour {
 			}
 		}
 		else {
+			SpriteRenderer renderer = GetComponent<SpriteRenderer>();
+			renderer.color = new Color(1f, 0.0f, 0.0f, 1f);
 			Invoke("stun", 1);
 		}
 	}
 	void stun() {
 		move = true;
-	}
-	void onTriggerEnter2D(Collider2D coll) {
-		if (coll.name.StartsWith("FoodPrefab")) {
-			ate = true;
-			Destroy(coll.gameObject);
-		}
+		SpriteRenderer renderer = GetComponent<SpriteRenderer>();
+		// changes sprite to red when collision is detected
+		renderer.color = new Color(1f, 1f, 1f, 1f);
 	}
 }

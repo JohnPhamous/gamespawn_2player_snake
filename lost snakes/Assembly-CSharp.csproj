@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Border.cs" />
+     <Compile Include="Assets\Food_Properties.cs" />
      <Compile Include="Assets\Snake.cs" />
      <Compile Include="Assets\Snake2.cs" />
      <Compile Include="Assets\SpawnFood.cs" />
