@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Food_Properties : MonoBehaviour {
 	// Border locations
-	private SpawnFood counter_getter;
+	// private SpawnFood counter_getter;
 	// Use this for initialization
 	void Start () {
 		
@@ -15,7 +15,7 @@ public class Food_Properties : MonoBehaviour {
 		
 	}
 	void OnTriggerEnter2D(Collider2D snake) {
-		counter_getter = gameObject.GetComponent<SpawnFood>();
+		// counter_getter = gameObject.GetComponent<SpawnFood>();
 		float bottom_bound = GameObject.Find("border_bottom").transform.position.y;
 		float top_bound = GameObject.Find("border_top").transform.position.y;
 		float left_bound = GameObject.Find("border_left").transform.position.x;

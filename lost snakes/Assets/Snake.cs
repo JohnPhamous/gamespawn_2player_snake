@@ -10,10 +10,13 @@ public class Snake : MonoBehaviour {
 	public bool ate = false;
 	public GameObject tailPrefab;
 	public bool move = true;
-	
+	private int max_size = 2;
 	// move sound effect
 	public AudioClip move_sound;
 	private AudioSource audio_source;
+
+	// portal data
+	public GameObject portalPrefab;
 
 	// Use this for initialization
 	void Start () {
@@ -65,7 +68,7 @@ public class Snake : MonoBehaviour {
 
 			// Move head in new direction based on input
 			GetComponent<Rigidbody2D>().MovePosition(transform.position + dir);
-			
+
 			if (ate) {
 				GameObject g = (GameObject)Instantiate(tailPrefab, v, Quaternion.identity);
 				tail.Insert(0, g.transform);
@@ -78,11 +81,16 @@ public class Snake : MonoBehaviour {
 				tail.Insert(0, tail.Last());
 				tail.RemoveAt(tail.Count - 1);
 			}
+			Debug.Log(tail.Count);
 		}
 		else {
 			SpriteRenderer renderer = GetComponent<SpriteRenderer>();
 			renderer.color = new Color(1f, 0.0f, 0.0f, 1f);
 			Invoke("stun", 1);
+		}
+		if (tail.Count == max_size) {
+			Debug.Log("spawn portal");
+			Instantiate(portalPrefab, new Vector3(0, 0, 0), Quaternion.identity);
 		}
 	}
 	void stun() {

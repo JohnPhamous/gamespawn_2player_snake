@@ -634,6 +634,8 @@ MonoBehaviour:
   tailPrefab: {fileID: 1169482426323748, guid: cd5677276d6d747429d4775f20c8e8f4, type: 2}
   move: 1
   move_sound: {fileID: 8300000, guid: 47f6cb7f09384416ba7c14ef7d117f47, type: 3}
+  portalPrefab: {fileID: 1653337987349654, guid: f11fb4a7f3f1e465484f92a0ec14a1c1,
+    type: 2}
 --- !u!1001 &1336080452
 Prefab:
   m_ObjectHideFlags: 0
