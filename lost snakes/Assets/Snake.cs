@@ -10,7 +10,7 @@ public class Snake : MonoBehaviour {
 	public bool ate = false;
 	public GameObject tailPrefab;
 	public bool move = true;
-	private int max_size = 0;
+	private int max_size = 10;
 	// move sound effect
 	public AudioClip move_sound;
 	private AudioSource audio_source;
@@ -62,6 +62,13 @@ public class Snake : MonoBehaviour {
 	where the head was. Deletes the last tail object.
 	 */
 	void Move() {
+		float bottom_bound = GameObject.Find("border_bottom").transform.position.y;
+		float top_bound = GameObject.Find("border_top").transform.position.y;
+		float left_bound = GameObject.Find("border_left").transform.position.x;
+		float right_bound = GameObject.Find("border_right").transform.position.x;
+		int x = (int)Random.Range(left_bound + 2, right_bound - 2);
+		int y = (int)Random.Range(top_bound - 2, bottom_bound + 2);
+		Vector3 delta_position = new Vector3(x, y, 0);
 		if (move) {
 			audio_source.PlayOneShot(move_sound, 2F);
 			// saves current position 
@@ -91,7 +98,7 @@ public class Snake : MonoBehaviour {
 		}
 		if (tail.Count == max_size && is_spawn == false) {
 			Debug.Log("spawn portal");
-			Instantiate(portalPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+			Instantiate(portalPrefab, delta_position, Quaternion.identity);
 			is_spawn = true;
 		}
 	}
