@@ -16,15 +16,16 @@ public class Border : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D other) {
 		if (other.gameObject.tag == "Player") {
-			Debug.Log("Hit");
-			Debug.Log("Snake");
+			// Debug.Log("Snake");
+			Debug.Log(other.gameObject.GetComponent<Snake2>().move);
 			other.gameObject.transform.position = other.gameObject.GetComponent<Snake2>().initial_position;
+			other.gameObject.GetComponent<Snake2>().move = false;
 		}
 		if (other.gameObject.tag == "Player2") {
-			Debug.Log("Hit");
-			Debug.Log("Snake2");
+			// Debug.Log("Snake2");
+			Debug.Log(other.gameObject.GetComponent<Snake>().move);
 			other.gameObject.transform.position = other.gameObject.GetComponent<Snake>().initial_position;
-			
+			other.gameObject.GetComponent<Snake>().move = false;
 		}
 	}
 }

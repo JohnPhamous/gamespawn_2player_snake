@@ -10,11 +10,18 @@ public class Snake2 : MonoBehaviour {
 	List<Transform> tail = new List<Transform>();
 	bool ate = false;
 	public GameObject tailPrefab;
+	public bool move = true;
+	
+	// move sound effect
+	public AudioClip move_sound;
+	private AudioSource audio_source;
+
 	// Use this for initialization
 	void Start () {
 		initial_position = new Vector3();
 		initial_position = transform.position;
 		InvokeRepeating("Move", 0.1f, 0.1f);
+		audio_source = GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
@@ -49,24 +56,33 @@ public class Snake2 : MonoBehaviour {
 	where the head was. Deletes the last tail object.
 	 */
 	void Move() {
-		// saves current position 
-		Vector2 v = transform.position;
-		// GetComponent<Rigidbody2D>().MovePosition(dir);
-		// Move head in new direction based on input
-		transform.Translate(dir);
+		if (move) {
+			audio_source.PlayOneShot(move_sound, 2F);
+			// saves current position 
+			Vector2 v = transform.position;
 
-		if (ate) {
-			GameObject g = (GameObject)Instantiate(tailPrefab, v, Quaternion.identity);
-			tail.Insert(0, g.transform);
-			ate = false;
+			// Move head in new direction based on input
+			transform.Translate(dir);
+
+			if (ate) {
+				GameObject g = (GameObject)Instantiate(tailPrefab, v, Quaternion.identity);
+				tail.Insert(0, g.transform);
+				ate = false;
+			}
+			else if (tail.Count > 0) {
+				// Moves last tail object to where head was
+				tail.Last().position = v;
+				// adds a tail object to the front of the list
+				tail.Insert(0, tail.Last());
+				tail.RemoveAt(tail.Count - 1);
+			}
 		}
-		else if (tail.Count > 0) {
-			// Moves last tail object to where head was
-			tail.Last().position = v;
-			// adds a tail object to the front of the list
-			tail.Insert(0, tail.Last());
-			tail.RemoveAt(tail.Count - 1);
+		else {
+			Invoke("stun", 1);
 		}
+	}
+	void stun() {
+		move = true;
 	}
 	void onTriggerEnter2D(Collider2D coll) {
 		if (coll.name.StartsWith("FoodPrefab")) {
